@@ -21,17 +21,13 @@ class User extends Authenticatable
         ];
     }
     
-    public function verifyUser()
-    {
-        return $this->hasOne('App\VerifyUser');
-    }
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','avatar','gender','birthday'
+        'email','name', 'password','gender','avatar','birthday','verified','token',
     ];
 
     /**
@@ -40,6 +36,6 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'rememberToken',
     ];
 }

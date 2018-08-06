@@ -9,14 +9,15 @@
             <td>Gender</td>
             <td>Avatar</td>
             <td>Birthday</td>
+            <td>Action</td>
         </tr>
         @foreach ($users as $user)
         <tr>
             <td>{{ $user->name }}</td>
             <td>{{ $user->email }}</td>
             <td>{{ $user->gender !== null ? $genders[$user->gender] : ''}}</td>
-            <td>{{ $user->avarta }}</td>
-            <td>{{ $user->birthday }}</td>
+            <td><img src="../storage/app/{{ $user->avatar }}"></td>
+            <td>{{ $user->birthday }}</td>           
             <td>
                 <a class="btn btn-primary" href="information/{{ $user->id }}/edit">Edit</a>
             </td>

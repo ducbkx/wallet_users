@@ -6,6 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateExchangesTable extends Migration
 {
+
     /**
      * Run the migrations.
      *
@@ -15,11 +16,13 @@ class CreateExchangesTable extends Migration
     {
         Schema::create('exchanges', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('user_id');
+            $table->boolean('type');
+            $table->string('name');
             $table->string('content');
             $table->bigInteger('money');
-            $table->date('date');
-            $table->integer('wallet_id_transfers');
-            $table->integer('wallet_id_receive');
+            $table->dateTime('date');
+            $table->integer('transaction_parent_id');
             $table->timestamps();
         });
     }
@@ -33,5 +36,5 @@ class CreateExchangesTable extends Migration
     {
         Schema::dropIfExists('exchanges');
     }
-}
 
+}

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\{User,VerifyUser};
+use App\User;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\VerifyMail;
 use App\Http\Controllers\Controller;
@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Registered;
-
+use Illuminate\Support\Facades\Storage;
 
 class RegisterController extends Controller
 {
@@ -84,14 +84,14 @@ use RegistersUsers;
     public function register(Request $request)
     {
         $validate = $this->validator($request->all());
-        
+
 
         event(new Registered($user = $this->create($request->all())));
 
         $this->guard()->logout();
         return redirect('/login')->with('status', 'Chúng tôi đã gửi cho bạn mã kích hoạt. Kiểm tra email của bạn và nhấp vào liên kết để xác minh.');
     }
-    
+
     /**
      * Create a new user instance after a valid registration.
      *
@@ -104,12 +104,9 @@ use RegistersUsers;
                     'name' => $data['name'],
                     'email' => $data['email'],
                     'password' => bcrypt($data['password']),
-                    'avatar' => $data['avatar'],
+                    'avatar' => $data['avatar']->store('avatars'),
                     'gender' => $data['gender'],
                     'birthday' => $data['birthday'],
-        ]);
-        $verifyUser = VerifyUser::create([
-                    'user_id' => $user->id,
                     'token' => str_random(40)
         ]);
         Mail::to($user->email)->send(new \App\Mail\VerifyMail($user));
@@ -118,20 +115,19 @@ use RegistersUsers;
 
     public function verifyUser($token)
     {
-        $verifyUser = VerifyUser::where('token', $token)->first();
-        if(isset($verifyUser) ){
-            $user = $verifyUser->user;
-            if(!$user->verified) {
-                $verifyUser->user->verified = 1;
-                $verifyUser->user->save();
+        $user = User::where('token', $token)->first();
+        if (isset($user)) {
+            if (!$user->verified) {
+                $user->verified = 1;
+                $user->save();
                 $status = "Email của bạn đã được xác nhận. Bây giờ bạn có thể đăng nhập";
-            }else{
+            } else {
                 $status = "Email của bạn đã được xác nhận. Bây giờ bạn có thể đăng nhập";
             }
-        }else{
+        } else {
             return redirect('/login')->with('warning', "Rất tiếc, không thể xác định được email của bạn.");
         }
- 
+
         return redirect('/login')->with('status', $status);
     }
 

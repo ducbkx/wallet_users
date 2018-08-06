@@ -9,7 +9,7 @@
 <br/>
 Email đăng ký của bạn là {{$user['email']}} , Vui lòng nhấp vào liên kết bên dưới để xác minh email của bạn
 <br/>
-<a href="{{url('user/verify', $user->verifyUser->token)}}">Xác nhận Email</a>
+<a href="{{url('user/verify', $user->token)}}">Xác nhận Email</a>
 </body>
  
 </html>
