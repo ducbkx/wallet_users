@@ -84,7 +84,9 @@ use RegistersUsers;
     public function register(Request $request)
     {
         $validate = $this->validator($request->all());
-
+        if ($validate->fails()) {
+            return redirect()->back()->withInput()->withErrors($validate);
+        }
 
         event(new Registered($user = $this->create($request->all())));
 

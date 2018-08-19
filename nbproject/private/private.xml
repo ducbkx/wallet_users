@@ -3,9 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/projects/demo/source/app/Http/Controllers/Auth/ResetPasswordController.php</file>
-            <file>file:/C:/projects/demo/source/app/Http/Controllers/Auth/ForgotPasswordController.php</file>
-            <file>file:/C:/projects/demo/source/routes/web.php</file>
+            <file>file:/C:/projects/demo/source/resources/views/exchanges/create.blade.php</file>
+            <file>file:/C:/projects/demo/source/app/Http/Controllers/ExchangeController.php</file>
+            <file>file:/C:/projects/demo/source/resources/views/exchanges/report.blade.php</file>
         </group>
     </open-files>
 </project-private>

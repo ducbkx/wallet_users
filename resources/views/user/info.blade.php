@@ -1,33 +1,51 @@
+
 @extends('layouts.app')
 
 @section('content')
-<div class="col-xs-8 col-xs-offset-2" style="margin-top: 50px;">
-    <table class="table table-hover">
-        <tr>
-            <td>Name</td>
-            <td>Email</td>
-            <td>Gender</td>
-            <td>Avatar</td>
-            <td>Birthday</td>
-            <td>Action</td>
-        </tr>
-        @foreach ($users as $user)
-        <tr>
-            <td>{{ $user->name }}</td>
-            <td>{{ $user->email }}</td>
-            <td>{{ $user->gender !== null ? $genders[$user->gender] : ''}}</td>
-            <td><img src="../storage/app/{{ $user->avatar }}"></td>
-            <td>{{ $user->birthday }}</td>           
-            <td>
-                <a class="btn btn-primary" href="information/{{ $user->id }}/edit">Edit</a>
-            </td>
-        </tr>
-        @endforeach
-    </table>
-    <div style="display:flex; justify-content:center;align-items:center;">
-      {{ $users->links() }}
-      </div>
 
-</div>
+<!-- Main content -->
+<section class="content">
+    <div class="box">
+        <div class="box-header with-border">
+            <div class="row">
+                <div class="col-sm-12">
+                    <table id="myTable" class="table table-bordered table-hover dataTable" role="grid" aria-describedby="example2_info">
+                        <thead>
+                            <tr role="row">
+                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="">Tên</th>
+                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="">Email</th>
+                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="">Giới tính</th>
+                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="">Ảnh</th>
+                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="">Ngày sinh</th>
+                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="" style="width: 150px">Xử lý</th></tr>
+                        </thead>
+                        <tbody>
+                            @foreach($users as $user)
+                            <tr role="row" class="odd">
+                                <td>{{ $user->name }}</td>
+                                <td>{{ $user->email }}</td>
+                                <td>{{ $user->gender !== null ? $genders[$user->gender] : '' }}</td>
+                                <td><img src="{{ asset( $user->avatar) }}"></td>
+                                <td>{{ $user->birthday }}</td>
+                                <td>
+                                    <div>
+                                        <a class="btn btn-primary" href="information/{{ $user->id }}/edit">Edit</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                    <div style="display:flex; justify-content:center;align-items:center;">
+                        {{ $users->links() }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- /.box -->
+
+</section>
+<!--/.content -->
 @endsection
-

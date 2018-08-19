@@ -16,13 +16,12 @@ class CreateExchangesTable extends Migration
     {
         Schema::create('exchanges', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id');
+            $table->integer('wallet_id');
             $table->boolean('type');
-            $table->string('name');
+            $table->integer('transaction_id');
             $table->string('content');
             $table->bigInteger('money');
             $table->dateTime('date');
-            $table->integer('transaction_parent_id');
             $table->timestamps();
         });
     }

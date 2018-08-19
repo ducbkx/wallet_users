@@ -16,8 +16,8 @@ class User extends Authenticatable
     public static function getGenders()
     {
         return [ 
-            self::SEX_MALE => 'Male',
-            self::SEX_FEMALE => 'Female',
+            self::SEX_MALE => 'Nam',
+            self::SEX_FEMALE => 'Nữ',
         ];
     }
     

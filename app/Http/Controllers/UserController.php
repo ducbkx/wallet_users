@@ -25,7 +25,7 @@ class UserController extends Controller
     public function information()
     {
         $users = User::where('email', Auth::user()->email)->paginate(5);
-        return view('user.information', ['users' => $users]);
+        return view('user.info', ['users' => $users]);
     }
 
     public function showForm()
@@ -46,6 +46,7 @@ class UserController extends Controller
             'password' => 'required|min:8|different:current_password|confirmed',
         ];
         $messages = [
+            'required' => 'Trường không được bỏ trống',
             'min' => 'Mật khẩu phải dài hơn :min ký tự',
             'old_password' => 'Mật khẩu hiện tại không chính xác',
             'confirmed' => 'Mật khẩu nhập lại không khớp',
@@ -54,19 +55,17 @@ class UserController extends Controller
 
         $request->validate($rules, $messages);
 
-
         $user = Auth::user();
         $user->password = bcrypt($request->get('password'));
         if ($user->save()) {
             return redirect()->route('home')->with('status', 'Bạn đã đổi mật khẩu thành công');
-            ;
         }
     }
 
     public function edit($id)
     {
         $user = User::find($id);
-        return view('user.editInformation', compact('user'));
+        return view('user.edit_info', compact('user'));
     }
 
     public function update(Request $request, $id)
@@ -76,7 +75,6 @@ class UserController extends Controller
         $rules = [
             'name' => 'required|string|max:255',
             'avatar' => 'required|mimes:jpeg,jpg,png|dimensions:width=100,height=100',
-            'code' => 'required|unique:users',
         ];
         $messages = [
             'required' => 'Trường không được bỏ trống',
@@ -89,8 +87,7 @@ class UserController extends Controller
             $rules['email'] = 'required|email|unique:users';
         }
         
-        ;
-        dd($request->validate($rules, $messages));
+        $request->validate($rules, $messages);
         $user->name = $request->name;
         $user->email = $request->email;
         $user->gender = $request->gender;

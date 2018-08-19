@@ -3,13 +3,17 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
-class Wallet extends Model
+class Exchange extends Model
 {
 
-    protected $table = 'wallets';
+    use Notifiable;
+
+
+    protected $table = 'exchanges';
     protected $fillable = [
-        'name', 'money', 'user_id',
+        'type', 'wallet_id', 'transaction_id', 'content', 'money', 'date',
     ];
 
     public static function getList()
@@ -18,4 +22,5 @@ class Wallet extends Model
                         ->keyBy('id')
                         ->toArray();
     }
+
 }

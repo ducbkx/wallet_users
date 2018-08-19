@@ -1,23 +1,26 @@
 
+<!DOCTYPE html>
+<html lang="{{ app()->getLocale() }}">
+    <head>
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/login.css') }}" rel="stylesheet">
+        <!------ Include the above in your HEAD tag ---------->
+    </head>
 
-@extends('layouts.app')
+    <div class="container">
+        <div class="row" id="pwd-container">
+            <div class="col-md-4"></div>
 
-@section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Register</div>
-
-                <div class="panel-body">
-                    <form class="form-horizontal" method="POST" enctype="multipart/form-data" action="{{ route('register') }}">
+            <div class="col-md-6 col-md-offset-3">
+                <section class="login-form">
+                    <form role="login" method="POST" enctype="multipart/form-data" action="{{ route('register') }}">
                         {{ csrf_field() }}
 
                         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                            <label for="name" class="col-md-4 control-label">Name</label>
 
-                            <div class="col-md-6">
-                                <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" required autofocus>
+                            <div class="col-md-12">
+                                <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" placeholder="Tên">
 
                                 @if ($errors->has('name'))
                                 <span class="help-block">
@@ -28,10 +31,8 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">E-Mail Address</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
+                            <div class="col-md-12">
+                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" placeholder="Email">
 
                                 @if ($errors->has('email'))
                                 <span class="help-block">
@@ -42,10 +43,9 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label for="password" class="col-md-4 control-label">Password</label>
 
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control" name="password" required>
+                            <div class="col-md-12">
+                                <input id="password" type="password" class="form-control" name="password" placeholder="Mật khẩu">
 
                                 @if ($errors->has('password'))
                                 <span class="help-block">
@@ -53,65 +53,63 @@
                                 </span>
                                 @endif
                             </div>
-                        </div>
 
-                        <div class="form-group">
-                            <label for="password-confirm" class="col-md-4 control-label">Confirm Password</label>
+                            <div class="form-group">
 
-                            <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
+                                <div class="col-md-12">
+                                    <input id="password-confirm" type="password" class="form-control" name="password_confirmation"placeholder="Nhập lại mật khẩu">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group{{ $errors->has('avatar') ? ' has-error' : '' }}">
-                            <label for="avatar" class="col-md-4 control-label">Avatar</label>
 
-                            <div class="col-md-6">
-                                <input id="avatar" type="file" class="form-control" name="avatar" value="{{ old('avatar') }}">
+                            <div class="form-group{{ $errors->has('avatar') ? ' has-error' : '' }}">
 
-                                @if ($errors->has('avatar'))
-                                <span class="help-block">
-                                    <strong>{{ $errors->first('avatar') }}</strong>
-                                </span>
-                                @endif
+
+                                <div class="col-md-12">
+                                    <label for="avatar" class="col-md-3 control-label">Ảnh</label>
+                                    <input id="avatar" type="file" class="form-control" name="avatar" value="{{ old('avatar') }}">
+
+                                    @if ($errors->has('avatar'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('avatar') }}</strong>
+                                    </span>
+                                    @endif
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="form-group">
-                            <label for="gender" class="col-md-4 control-label">Gender</label>
-                            <div class="col-md-6">
-                                <select name="gender" class="form-control">
-                                    @foreach($genders as $value => $text)
-                                    <option value="{!! $value !!}">{!! $text !!}</option>
-                                    @endforeach
-                                </select>
+                            <div class="form-group{{ $errors->has('gender') ? ' has-error' : '' }}">
+                                <div class="col-md-12">
+                                    <label for="gender" class="col-md-3 control-label input-lgf">Giới tính</label>
+                                    <select name="gender" class="form-control">
+                                        @foreach($genders as $value => $text)
+                                        <option value="{!! $value !!}">{!! $text !!}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="form-group{{ $errors->has('birthday') ? ' has-error' : '' }}">
-                            <label for="name" class="col-md-4 control-label">Birthday</label>
+                            <div class="form-group{{ $errors->has('birthday') ? ' has-error' : '' }}">
+                                <div class="col-md-12">
+                                    <label for="birthday" class="col-md-3 control-label">Ngày sinh</label>
+                                    <input id="birthday" type="date" class="form-control input-lgf" name="birthday" value="{{ old('birthday') }}">
 
-                            <div class="col-md-6">
-                                <input id="birthday" type="date" class="form-control" name="birthday" value="{{ old('birthday') }}">
-
-                                @if ($errors->has('birthday'))
-                                <span class="help-block">
-                                    <strong>{{ $errors->first('birthday') }}</strong>
-                                </span>
-                                @endif
+                                    @if ($errors->has('birthday'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('birthday') }}</strong>
+                                    </span>
+                                    @endif
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
-                                    Register
-                                </button>
+                            <div class="pwstrength_viewport_progress"></div>
+                            <div class="col-md-12">
+                                <button type="submit" name="go" class="btn btn-lg btn-primary btn-block">Đăng ký</button>
                             </div>
-                        </div>
+                            <div>
+                                <a href="{{ route('login') }}">Đăng nhập</a>&nbsp;&nbsp;&nbsp; <a href="{{ route('password.request') }}">Quên mật khẩu</a>
+                            </div>
                     </form>
-                </div>
+                </section>  
             </div>
+            <div class="col-md-4"></div>
         </div>
     </div>
-</div>
-@endsection
+</html>

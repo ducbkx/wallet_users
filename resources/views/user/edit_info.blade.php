@@ -6,7 +6,7 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading">Create User</div>
+                <div class="panel-heading">Sửa thông tin</div>
 
                 <div class="panel-body">
                     <form class="form-horizontal" enctype="multipart/form-data" method="POST" action="{{ route('information.update', $user->id) }}">
@@ -49,9 +49,10 @@
                                     @endforeach
                                 </select>
                             </div>
+                        </div>>
                             
                         <div class="form-group{{ $errors->has('avatar') ? ' has-error' : '' }}">
-                            <label for="avatar" class="col-md-4 control-label">Avatar</label>
+                            <label for="avatar" class="col-md-4 control-label">Ảnh</label>
 
                             <div class="col-md-6">
                                 <input id="avatar" type="file" class="form-control" name="avatar" value="{{ old('avatar', $user->avatar) }}">
@@ -64,9 +65,8 @@
                             </div>
                         </div>
                         
-                        </div>
                         <div class="form-group{{ $errors->has('birthday') ? ' has-error' : '' }}">
-                            <label for="code" class="col-md-4 control-label">Birthday</label>
+                            <label for="birthday" class="col-md-4 control-label">Ngày sinh</label>
 
                             <div class="col-md-6">
                                 <input id="birthday" type="date" class="form-control" name="birthday" value="{{ old('birthday', $user->birthday) }}">
@@ -77,7 +77,6 @@
                                 </span>
                                 @endif
                             </div>
-                                </select>
                             </div>
 
                         <div class="form-group">
@@ -89,8 +88,8 @@
                         </div>
                     </form>
                 </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 @endsection
