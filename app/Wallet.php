@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Wallet extends Model
 {
@@ -18,4 +19,11 @@ class Wallet extends Model
                         ->keyBy('id')
                         ->toArray();
     }
+
+    public static function getWallet()
+    {
+        $wallet = self::where('user_id', Auth::user()->id);
+        return $wallet;
+    }
+
 }

@@ -6,7 +6,7 @@
 <section class="content">
     <div class="box">
         <div class="box-header with-border">
-            <div>
+            <div class="form-group">
                 <select id="tranType" class="form-group">
 
                     <option value="0">Chi tiêu</option>

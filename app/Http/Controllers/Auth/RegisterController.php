@@ -10,8 +10,6 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Support\Facades\Storage;
-
 class RegisterController extends Controller
 {
     /*
@@ -59,8 +57,6 @@ use RegistersUsers;
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'avatar' => 'required|mimes:jpeg,jpg,png|dimensions:width=100,height=100',
-            'code' => 'required|unique:users',
         ];
         $messages = [
             'required' => 'Trường không được bỏ trống',
@@ -70,8 +66,7 @@ use RegistersUsers;
             'password.string' => 'Mật khẩu phải là chuỗi',
             'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự',
             'password.confirmed' => 'Mật khẩu nhập lại không chính xác',
-            'avatar.mimes' => 'Ảnh không đúng định dạng',
-            'avatar.dimensions' => 'Ảnh không đúng kích thước',];
+        ];
         return Validator::make($data, $rules, $messages);
     }
 
@@ -106,7 +101,6 @@ use RegistersUsers;
                     'name' => $data['name'],
                     'email' => $data['email'],
                     'password' => bcrypt($data['password']),
-                    'avatar' => $data['avatar']->store('avatars'),
                     'gender' => $data['gender'],
                     'birthday' => $data['birthday'],
                     'token' => str_random(40)

@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ExchangeRequest;
+use App\Http\Requests\ExchangeUpdateRequest;
 use Carbon\Carbon;
 use App\{
     Exchange,
@@ -34,30 +36,19 @@ class ExchangeController extends Controller
         $tranExpense = $this->Transaction->getTranByType(Transaction::EXPENSE);
         $tranIncome = $this->Transaction->getTranByType(Transaction::INCOME);
         $wallet = Wallet::where('user_id', Auth::user()->id)->get();
-        $transaction = Transaction::where('parent_id', '0')->where('user_id', Auth::user()->id)->get();
+        $transaction = Transaction::getTran()->where('parent_id', '0')->get();
         return view('exchanges.create', compact('tranExpense', 'tranIncome'), ['wallets' => $wallet]);
     }
 
-    public function creatExchange(Request $request)
+    public function creatExchange(ExchangeRequest $request)
     {
-        $rules = [
-            'content' => 'max:255|required',
-            'money' => 'required|numeric|min:0',
-        ];
-        $messages = [
-            'content.max' => 'Nội dung giao dịch không quá :mã ký tự',
-            'money.required' => 'Tiền giao dịch không được bỏ trống',
-            'money.numeric' => 'Tiền giao dịch phải là số',
-            'money.min' => 'Tiền giao dịch phải lớn hơn :min',
-        ];
-        $request->validate($rules, $messages);
         $data = $request->all();
         $data['date'] = new Carbon();
         $exchange = new Exchange;
         $exchange = $exchange->create($data);
         $wallet = Wallet::findOrFail($exchange['wallet_id']);
         //dd($exchange['type']);
-        if ($exchange['type'] == 0) {
+        if ($exchange['type'] == Transaction::EXPENSE) {
             DB::beginTransaction();
 
             try {
@@ -94,9 +85,8 @@ class ExchangeController extends Controller
 
     public function listExchange()
     {
-        $wallet = Wallet::select('id')->where('user_id', Auth::user()->id)->get()->toArray();
-        $exchange_expense = Exchange::whereIn('wallet_id', $wallet)->where('type', '0')->orderBy('date', 'DESC')->paginate(10);
-        $exchange_income = Exchange::whereIn('wallet_id', $wallet)->where('type', '1')->orderBy('date', 'DESC')->paginate(10);
+        $exchange_expense = Exchange::getExchange()->where('type', Transaction::EXPENSE)->orderBy('date', 'DESC')->paginate(10);
+        $exchange_income = Exchange::getExchange()->where('type', Transaction::INCOME)->orderBy('date', 'DESC')->paginate(10);
 
         return view('exchanges.list', compact('exchange_expense', 'exchange_income'));
     }
@@ -104,25 +94,15 @@ class ExchangeController extends Controller
     public function edit($id)
     {
         $exchange = Exchange::find($id);
-        $transaction = Transaction::where('parent_id', '0')->where('user_id', Auth::user()->id)->where('type', $exchange->type)->get();
+        $transaction = Transaction::getTranParent()->where('user_id', Auth::user()->id)->where('type', $exchange->type)->get();
         //dd($transaction);
 
         return view('exchanges.edit', compact('exchange'), ['transactions' => $transaction]);
     }
 
-    public function update(Request $request, $id)
+    public function update(ExchangeUpdateRequest $request, $id)
     {
         $exchange = Exchange::find($id);
-        $rules = [
-            'content' => 'max:255|required',
-            'money' => 'required|numeric',
-        ];
-        $messages = [
-            'content.max' => 'Nội dung giao dịch không quá :mã ký tự',
-            'money.required' => 'Tiền giao dịch không được bỏ trống',
-            'money.numeric' => 'Tiền giao dịch phải là số',
-        ];
-        $request->validate($rules, $messages);
         $data = $exchange->money - $request->money;
         $exchange->transaction_id = $request->transaction_id;
         $exchange->content = $request->content;
@@ -130,13 +110,11 @@ class ExchangeController extends Controller
         //dd($exchange->money);
         $wallet = Wallet::findOrFail($exchange['wallet_id']);
         //dd($exchange['type']);
-        if ($exchange->type == 0) {
+        if ($exchange->type == Transaction::EXPENSE) {
             DB::beginTransaction();
 
             try {
                 $wallet->money = $wallet->money + $data;
-                //dd($exchange);
-                //dd($wallet->money);
                 $wallet->save();
                 $exchange->save();
                 DB::commit();
@@ -171,7 +149,7 @@ class ExchangeController extends Controller
         $exchange = Exchange::find($id);
         Exchange::find($id)->delete();
         $wallet = Wallet::findOrFail($exchange['wallet_id']);
-        if ($exchange['type'] == 0) {
+        if ($exchange['type'] == Transaction::EXPENSE) {
             $wallet->money = $wallet->money + $exchange['money'];
             $wallet->save();
             return redirect()->route('exchange.list');
@@ -184,17 +162,27 @@ class ExchangeController extends Controller
 
     public function report()
     {
-        $date = Exchange::select(DB::raw("MONTH(date) as month"))->groupBy(DB::raw("MONTH(date)"))->get()->toArray();
+        $date = Exchange::select(DB::raw("MONTH(date) as month"))
+                ->groupBy(DB::raw("MONTH(date)"))->get()
+                ->toArray();
         $date = array_column($date, 'month');
-        $expense = Exchange::select(DB::raw("SUM(money) as count"))->where('type','0')->groupBy(DB::raw("MONTH(date),YEAR(date)"))->get()->toArray();
+        $expense = Exchange::select(DB::raw("SUM(money) as count"))
+                ->where('type', 'EXPENSE')
+                ->groupBy(DB::raw("MONTH(date),YEAR(date)"))
+                ->get()
+                ->toArray();
         $expense = array_column($expense, 'count');
         //dd($expense);
-        $income = Exchange::select(DB::raw("SUM(money) as count"))->where('type','1')->groupBy(DB::raw("MONTH(date),YEAR(date)"))->get()->toArray();
+        $income = Exchange::select(DB::raw("SUM(money) as count"))
+                ->where('type', 'INCOME')
+                ->groupBy(DB::raw("MONTH(date),YEAR(date)"))
+                ->get()
+                ->toArray();
         $income = array_column($income, 'count');
         return view('exchanges.report')
-            ->with('date', json_encode($date))
-            ->with('expense',json_encode($expense,JSON_NUMERIC_CHECK))
-            ->with('income',json_encode($income,JSON_NUMERIC_CHECK));
+                        ->with('date', json_encode($date))
+                        ->with('expense', json_encode($expense, JSON_NUMERIC_CHECK))
+                        ->with('income', json_encode($income, JSON_NUMERIC_CHECK));
     }
 
 }

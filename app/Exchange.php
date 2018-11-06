@@ -4,12 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
+use App\Wallet;
 
 class Exchange extends Model
 {
 
     use Notifiable;
-
 
     protected $table = 'exchanges';
     protected $fillable = [
@@ -21,6 +21,12 @@ class Exchange extends Model
         return self::all()
                         ->keyBy('id')
                         ->toArray();
+    }
+
+    public static function getExchange()
+    {
+        $exchange = self::whereIn('wallet_id', Wallet::getWallet()->select('id'));
+        return $exchange;
     }
 
 }

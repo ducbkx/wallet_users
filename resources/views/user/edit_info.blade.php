@@ -13,7 +13,7 @@
                         {{ csrf_field() }}
 
                         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                            <label for="name" class="col-md-4 control-label">Name</label>
+                            <label for="name" class="col-md-4 control-label">Tên</label>
 
                             <div class="col-md-6">
                                 <input id="name" type="text" class="form-control" name="name" value="{{ old('name', $user->name) }}">
@@ -27,7 +27,7 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">E-Mail Address</label>
+                            <label for="email" class="col-md-4 control-label">Email</label>
 
                             <div class="col-md-6">
                                 <input id="email" type="email" class="form-control" name="email" value="{{ old('email', $user->email) }}">
@@ -41,7 +41,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="gender" class="col-md-4 control-label">Gender</label>
+                            <label for="gender" class="col-md-4 control-label">Giới tính</label>
                             <div class="col-md-6">
                                 <select name="gender" class="form-control">
                                     @foreach($genders as $value => $text)
@@ -49,22 +49,9 @@
                                     @endforeach
                                 </select>
                             </div>
-                        </div>>
-                            
-                        <div class="form-group{{ $errors->has('avatar') ? ' has-error' : '' }}">
-                            <label for="avatar" class="col-md-4 control-label">Ảnh</label>
-
-                            <div class="col-md-6">
-                                <input id="avatar" type="file" class="form-control" name="avatar" value="{{ old('avatar', $user->avatar) }}">
-
-                                @if ($errors->has('avatar'))
-                                <span class="help-block">
-                                    <strong>{{ $errors->first('avatar') }}</strong>
-                                </span>
-                                @endif
-                            </div>
                         </div>
-                        
+
+
                         <div class="form-group{{ $errors->has('birthday') ? ' has-error' : '' }}">
                             <label for="birthday" class="col-md-4 control-label">Ngày sinh</label>
 
@@ -77,7 +64,7 @@
                                 </span>
                                 @endif
                             </div>
-                            </div>
+                        </div>
 
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
@@ -88,8 +75,8 @@
                         </div>
                     </form>
                 </div>
-                </div>
             </div>
         </div>
     </div>
+</div>
 @endsection

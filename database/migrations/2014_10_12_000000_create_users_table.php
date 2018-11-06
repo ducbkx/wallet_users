@@ -18,7 +18,6 @@ class CreateUsersTable extends Migration {
             $table->string('name');
             $table->string('password');
             $table->boolean('gender')->default(0);
-            $table->string('avatar')->nullable();
             $table->date('birthday')->nullable();
             $table->boolean('verified')->default(false);
             $table->string('token');

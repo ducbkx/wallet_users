@@ -61,21 +61,6 @@
                                 </div>
                             </div>
 
-                            <div class="form-group{{ $errors->has('avatar') ? ' has-error' : '' }}">
-
-
-                                <div class="col-md-12">
-                                    <label for="avatar" class="col-md-3 control-label">Ảnh</label>
-                                    <input id="avatar" type="file" class="form-control" name="avatar" value="{{ old('avatar') }}">
-
-                                    @if ($errors->has('avatar'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('avatar') }}</strong>
-                                    </span>
-                                    @endif
-                                </div>
-                            </div>
-
                             <div class="form-group{{ $errors->has('gender') ? ' has-error' : '' }}">
                                 <div class="col-md-12">
                                     <label for="gender" class="col-md-3 control-label input-lgf">Giới tính</label>

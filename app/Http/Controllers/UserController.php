@@ -70,30 +70,26 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
-        
+
         $user = User::find($id);
         $rules = [
             'name' => 'required|string|max:255',
-            'avatar' => 'required|mimes:jpeg,jpg,png|dimensions:width=100,height=100',
         ];
         $messages = [
             'required' => 'Trường không được bỏ trống',
             'name.string' => 'Dữ liệu phải là chuỗi',
             'email.email' => 'Dữ liệu phải có định dạng email',
-            'email.unique' => 'Email đã tồn tại',
-            'avatar.mimes' => 'Ảnh không đúng định dạng',
-            'avatar.dimensions' => 'Ảnh không đúng kích thước',];
+        ];
         if ($user->email != $request->get('email')) {
             $rules['email'] = 'required|email|unique:users';
         }
-        
+
         $request->validate($rules, $messages);
         $user->name = $request->name;
         $user->email = $request->email;
         $user->gender = $request->gender;
-        $user->avatar = $request->file('avatar')->store('avatars');
         $user->birthday = $request->birthday;
-        
+
 
         if ($user->save()) {
             return redirect()->route('information');

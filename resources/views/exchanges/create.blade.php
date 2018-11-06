@@ -22,7 +22,7 @@
                             <div class="col-md-6">
                                 <select name="type" id="tranType" class="form-control">
                                     @foreach($types as $value => $text)
-                                    <option value="{!! $value !!}">{!! $text !!}</option>
+                                    <option value="{!! $value !!}" @if(old('type') == $value) {{ 'selected' }} @endif>{!! $text !!}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -34,7 +34,7 @@
                                 <select name="wallet_id" class="form-control">
 
                                     @foreach($wallets as $wallet)
-                                    <option value="{!! $wallet['id'] !!}">{!! $wallet['name'] !!}</option>
+                                    <option value="{!! $wallet['id'] !!}" @if(old('wallet_id') == $wallet['id']) {{ 'selected' }} @endif>{!! $wallet['name'] !!}</option>
                                     @endforeach         
                                 </select>
                             </div>
@@ -46,12 +46,12 @@
                             <div class="col-md-6">
                                 <select class="form-control" id="tranTypeExpense" name="transaction_id"  value="{{ old('parent_id') }}">                                   
                                     @foreach($tranExpense as $transaction)
-                                    <option  value="{!! $transaction['id'] !!}">{!! $transaction['name'] !!}</option>
+                                    <option  value="{!! $transaction['id'] !!}" @if(old('transaction_id') == $transaction['id']) {{ 'selected' }} @endif>{!! $transaction['name'] !!}</option>
                                     @endforeach
                                 </select>
                                 <select class="form-control hidden" id="tranTypeIncome" name="transaction_id"  value="{{ old('parent_id') }}">                                   
                                     @foreach($tranIncome as $transaction)
-                                    <option  value="{!! $transaction['id'] !!}">{!! $transaction['name'] !!}</option>
+                                    <option  value="{!! $transaction['id'] !!}" @if(old('transaction_id') == $transaction['id']) {{ 'selected' }} @endif>{!! $transaction['name'] !!}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -73,7 +73,7 @@
                             <label for="money" class="col-md-4 control-label">Số tiền</label>
 
                             <div class="col-md-6">
-                                <input id="money" type="number" class="form-control" name="money" required>
+                                <input id="money" type="number" class="form-control" name="money" value="{{ old('money') }}">
 
                                 @if ($errors->has('money'))
                                 <span class="help-block">
@@ -115,24 +115,6 @@
                 $("#tranTypeExpense").attr('disabled', 'disabled');
             }
         });
-        $(".form-horizontal").validate({
-            rules:
-                    {
-                        content: {required: true, },
-                        money: {required: true, },
-                    },
-            messages:
-                    {
-                        name: {required: "Bạn chưa nhập tên ví", },
-                        money: {required: "Bạn chưa nhập số tiền giao dịch", },
-                    },
-
-        });
-        $("#type").change(function () {
-
-
-        });
-
     });
 </script>
 @endsection

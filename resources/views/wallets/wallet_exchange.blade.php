@@ -23,7 +23,7 @@
                                 <select name="wallet_id_transfers" class="form-control">
 
                                     @foreach($wallets as $wallet)
-                                    <option value="{!! $wallet['id'] !!}">{!! $wallet['name'] !!}</option>
+                                    <option value="{!! $wallet['id'] !!}" @if(old('wallet_id_transfers') == $wallet['id']) {{ 'selected' }} @endif>{!! $wallet['name'] !!}</option>
                                     @endforeach         
                                 </select>
                                 @if ($errors->has('wallet_id_transfers'))
@@ -39,7 +39,7 @@
                             <div class="col-md-6">
                                 <select name="wallet_id_receive" class="form-control">
                                     @foreach($wallets as $wallet)
-                                    <option value="{!! $wallet['id'] !!}">{!! $wallet['name'] !!}</option>
+                                    <option value="{!! $wallet['id'] !!}" @if(old('wallet_id_receive') == $wallet['id']) {{ 'selected' }} @endif>{!! $wallet['name'] !!}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -62,7 +62,7 @@
                             <label for="money" class="col-md-4 control-label">Số tiền</label>
 
                             <div class="col-md-6">
-                                <input id="money" type="number" class="form-control" name="money">
+                                <input id="money" type="number" class="form-control" name="money" step="1000" value="{{ old('money') }}">
 
                                 @if ($errors->has('money'))
                                 <span class="help-block">
@@ -87,3 +87,4 @@
     </div>
 </div>
 @endsection
+

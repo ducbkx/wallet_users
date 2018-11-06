@@ -41,7 +41,7 @@
                                     <label for="money" class="col-md-4 control-label">Tiền trong ví</label>
 
                                     <div class="col-md-6">
-                                        <input id="money" type="number" class="form-control" name="money" required>
+                                        <input id="money" type="number" class="form-control" name="money" value="{{ old('money') }}">
 
                                         @if ($errors->has('money'))
                                         <span class="help-block">

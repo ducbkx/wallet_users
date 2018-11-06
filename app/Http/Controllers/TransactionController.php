@@ -6,6 +6,8 @@ use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\TransactionRequest;
+use App\Http\Requests\TransactionUpdateRequest;
 use App\{
     Wallet,
     User,
@@ -31,16 +33,8 @@ class TransactionController extends Controller
         return view('transactions.create', compact('tranExpense', 'tranIncome'));
     }
 
-    public function creatTransaction(Request $request)
+    public function creatTransaction(TransactionRequest $request)
     {
-        $rules = [
-            'name' => 'required|max:50'
-        ];
-        $messages = [
-            'required' => 'Tên giao dịch không được để trống',
-            'max' => 'Tên ví không được nhiều hơn :max ký tự'
-        ];
-        $request->validate($rules, $messages);
         $transaction = $request->all();
         $transaction['parent_id'] = $request->parent_id;
         $transaction['user_id'] = Auth::user()->id;
@@ -51,8 +45,8 @@ class TransactionController extends Controller
 
     public function listTransaction()
     {
-        $collection = Transaction::where('user_id', Auth::user()->id)->paginate(10);
-        $tranParent = Transaction::where('parent_id', '0')->get();
+        $collection = Transaction::getTran()->paginate(10);
+        $tranParent = Transaction::getTranParent()->get();
         $transactions = array();
         if ($tranParent) {
             foreach ($tranParent as $transaction) {
@@ -66,22 +60,14 @@ class TransactionController extends Controller
     public function edit($id)
     {
         $transaction = Transaction::find($id);
-        $transaction_parent = Transaction::where('parent_id', '0')->where('type', $transaction->type)->get();
+        $transaction_parent = Transaction::getTranParent()->where('type', $transaction->type)->get();
         
         return view('transactions.edit', compact('transaction','transaction_parent'));
     }
 
-    public function update(Request $request, $id)
+    public function update(TransactionUpdateRequest $request, $id)
     {
         $transaction = Transaction::find($id);
-        $rules = [
-            'name' => 'required|max:100'
-        ];
-        $messages = [
-            'required' => 'Tên giao dịch không được để trống',
-            'max' => 'Tên giao dịch không được nhiều hơn :max ký tự'
-        ];
-        $request->validate($rules, $messages);
 
         $transaction->name = $request->name;
         $transaction->parent_id = $request->parent_id;
